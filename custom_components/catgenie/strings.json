@@ -1,0 +1,89 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Enter your phone number to receive an SMS verification code.",
+        "data": {
+          "country_code": "Country code",
+          "phone": "Phone number"
+        },
+        "data_description": {
+          "country_code": "Your country calling code (e.g. 61 for Australia).",
+          "phone": "Your phone number without country code."
+        }
+      },
+      "code": {
+        "description": "Enter the SMS verification code sent to your phone.",
+        "data": {
+          "code": "Verification code"
+        },
+        "data_description": {
+          "code": "The 6-digit code sent to your phone via SMS."
+        }
+      },
+      "reauth_confirm": {
+        "description": "Your CatGenie session has expired. Enter your phone number to receive a new SMS code.",
+        "data": {
+          "country_code": "Country code",
+          "phone": "Phone number"
+        },
+        "data_description": {
+          "country_code": "Your country calling code (e.g. 61 for Australia).",
+          "phone": "Your phone number without country code."
+        }
+      },
+      "reauth_code": {
+        "description": "Enter the SMS verification code sent to your phone.",
+        "data": {
+          "code": "Verification code"
+        },
+        "data_description": {
+          "code": "The 6-digit code sent to your phone via SMS."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
+    },
+    "abort": {
+      "already_configured": "[%key:common::config_flow::abort::already_configured_account%]",
+      "reauth_successful": "[%key:common::config_flow::abort::reauth_successful%]"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "sani_solution": {
+        "name": "Sani-solution remaining"
+      },
+      "status": {
+        "name": "Status",
+        "state": {
+          "idle": "Idle",
+          "cleaning": "Cleaning"
+        }
+      },
+      "clean_progress": {
+        "name": "Clean progress"
+      },
+      "total_cycles": {
+        "name": "Total cycles"
+      },
+      "last_clean": {
+        "name": "Last clean"
+      }
+    }
+  },
+  "exceptions": {
+    "authentication_failed": {
+      "message": "Authentication failed. Please re-authenticate."
+    },
+    "communication_error": {
+      "message": "Error communicating with CatGenie API: {error}"
+    },
+    "api_error": {
+      "message": "Error communicating with CatGenie API: {error}"
+    }
+  }
+}
