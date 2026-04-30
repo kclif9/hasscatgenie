@@ -5,8 +5,8 @@
     "@kclif9"
   ],
   "config_flow": true,
-  "dependencies": [],
   "documentation": "https://github.com/kclif9/hasscatgenie",
+  "dependencies": [],
   "issue_tracker": "https://github.com/kclif9/hasscatgenie/issues",
   "iot_class": "cloud_polling",
   "loggers": [
