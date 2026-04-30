@@ -5,16 +5,15 @@
     "@kclif9"
   ],
   "config_flow": true,
-  "documentation": "https://github.com/kclif9/hasscatgenie",
   "dependencies": [],
-  "issue_tracker": "https://github.com/kclif9/hasscatgenie/issues",
+  "documentation": "https://github.com/kclif9/hasscatgenie",
   "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/kclif9/hasscatgenie/issues",
   "loggers": [
     "catgenie"
   ],
   "quality_scale": "bronze",
   "requirements": [
     "catgenie==0.1.2"
-  ],
-  "version": "0.1.0"
+  ]
 }
