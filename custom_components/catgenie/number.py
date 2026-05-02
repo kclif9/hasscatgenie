@@ -116,6 +116,6 @@ class CatGenieNumberEntity(CatGenieEntity, NumberEntity):
     async def async_set_native_value(self, value: float) -> None:
         """Set the number value."""
         await self.entity_description.set_fn(
-            self.coordinator.client, self.coordinator.device_id, int(value)
+            self.coordinator.client, self.coordinator.device_id, round(value)
         )
         await self.coordinator.async_request_refresh()

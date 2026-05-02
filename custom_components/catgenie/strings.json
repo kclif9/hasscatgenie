@@ -57,8 +57,8 @@
       "problem": {
         "name": "Problem"
       },
-      "low_heater": {
-        "name": "Heater"
+      "heater_fault": {
+        "name": "Heater Fault"
       },
       "fan_shutter": {
         "name": "Fan shutter"

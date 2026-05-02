@@ -37,8 +37,8 @@ BINARY_SENSOR_DESCRIPTIONS: tuple[CatGenieBinarySensorDescription, ...] = (
         value_fn=lambda device: len(device.active_errors) > 0,
     ),
     CatGenieBinarySensorDescription(
-        key="low_heater",
-        translation_key="low_heater",
+        key="heater_fault",
+        translation_key="heater_fault",
         device_class=BinarySensorDeviceClass.PROBLEM,
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,

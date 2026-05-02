@@ -66,6 +66,10 @@ class CatGenieSelectEntity(CatGenieEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
+        if option not in CLEANING_MODE_TO_ENUM:
+            raise ValueError(
+                f"Unsupported option '{option}', must be one of: {CLEANING_MODE_OPTIONS}"
+            )
         mode = CLEANING_MODE_TO_ENUM[option]
         await self.coordinator.client.set_cleaning_mode(
             self.coordinator.device_id, mode

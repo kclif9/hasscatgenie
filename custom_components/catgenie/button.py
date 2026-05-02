@@ -27,7 +27,6 @@ BUTTON_DESCRIPTIONS: tuple[CatGenieButtonDescription, ...] = (
     CatGenieButtonDescription(
         key="start_clean",
         translation_key="start_clean",
-        device_class=ButtonDeviceClass.IDENTIFY,
     ),
 )
 
