@@ -50,9 +50,8 @@ SENSOR_DESCRIPTIONS: tuple[CatGenieSensorDescription, ...] = (
         translation_key="clean_progress",
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda device: (
-            device.operation_status.clean_progress_pct if device.is_cleaning else None
-        ),
+        available_fn=lambda device: device.is_cleaning,
+        value_fn=lambda device: device.operation_status.clean_progress_pct,
     ),
     CatGenieSensorDescription(
         key="total_cycles",

@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from catgenie import CatGenieAuth
-from catgenie.auth import AuthenticationError
+from catgenie.auth import CatGenieAuthenticationError
 import voluptuous as vol
 
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
@@ -53,7 +53,7 @@ class CatGenieConfigFlow(ConfigFlow, domain=DOMAIN):
                         country_code=self._country_code,
                         phone=self._phone,
                     )
-            except AuthenticationError:
+            except CatGenieAuthenticationError:
                 errors["base"] = "cannot_connect"
             except Exception:
                 LOGGER.exception("Unexpected exception requesting login code")
@@ -81,7 +81,7 @@ class CatGenieConfigFlow(ConfigFlow, domain=DOMAIN):
                         phone=self._phone,
                         code=user_input[CONF_CODE],
                     )
-            except AuthenticationError:
+            except CatGenieAuthenticationError:
                 errors["base"] = "invalid_auth"
             except Exception:
                 LOGGER.exception("Unexpected exception during login")
@@ -121,7 +121,7 @@ class CatGenieConfigFlow(ConfigFlow, domain=DOMAIN):
                         country_code=self._country_code,
                         phone=self._phone,
                     )
-            except AuthenticationError:
+            except CatGenieAuthenticationError:
                 errors["base"] = "cannot_connect"
             except Exception:
                 LOGGER.exception("Unexpected exception requesting login code")
@@ -149,7 +149,7 @@ class CatGenieConfigFlow(ConfigFlow, domain=DOMAIN):
                         phone=self._phone,
                         code=user_input[CONF_CODE],
                     )
-            except AuthenticationError:
+            except CatGenieAuthenticationError:
                 errors["base"] = "invalid_auth"
             except Exception:
                 LOGGER.exception("Unexpected exception during re-auth login")
