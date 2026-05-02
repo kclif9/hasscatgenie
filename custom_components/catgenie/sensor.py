@@ -19,13 +19,13 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .coordinator import CatGenieConfigEntry
-from .entity import CatGenieEntity
+from .entity import CatGenieEntity, CatGenieEntityDescription
 
 PARALLEL_UPDATES = 0
 
 
 @dataclass(frozen=True, kw_only=True)
-class CatGenieSensorDescription(SensorEntityDescription):
+class CatGenieSensorDescription(CatGenieEntityDescription, SensorEntityDescription):
     """Describe a CatGenie sensor."""
 
     value_fn: Callable[[Device], int | str | datetime | None]
