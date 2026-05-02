@@ -58,7 +58,7 @@
                 "name": "Fan shutter"
             },
             "low_heater": {
-                "name": "Low heater"
+                "name": "Heater"
             },
             "occupancy": {
                 "name": "Cat detected"
