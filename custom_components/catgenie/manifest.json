@@ -14,7 +14,7 @@
   ],
   "quality_scale": "bronze",
   "requirements": [
-    "catgenie==0.1.2"
+    "catgenie==0.1.5"
   ],
   "version": "0.1.1"
 }

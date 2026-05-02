@@ -53,6 +53,48 @@
     }
   },
   "entity": {
+    "binary_sensor": {
+      "problem": {
+        "name": "Problem"
+      },
+      "heater_fault": {
+        "name": "Heater Fault"
+      },
+      "fan_shutter": {
+        "name": "Fan shutter"
+      },
+      "occupancy": {
+        "name": "Cat detected"
+      }
+    },
+    "button": {
+      "start_clean": {
+        "name": "Start clean"
+      }
+    },
+    "number": {
+      "volume_level": {
+        "name": "Volume level"
+      },
+      "cat_delay": {
+        "name": "Cat activation delay"
+      },
+      "cat_sensitivity": {
+        "name": "Cat sensitivity"
+      },
+      "auto_lock_delay": {
+        "name": "Panel lock delay"
+      }
+    },
+    "select": {
+      "cleaning_mode": {
+        "name": "Cleaning mode",
+        "state": {
+          "automatic": "Automatic",
+          "manual": "Manual"
+        }
+      }
+    },
     "sensor": {
       "sani_solution": {
         "name": "Sani-solution remaining"
@@ -72,6 +114,26 @@
       },
       "last_clean": {
         "name": "Last clean"
+      },
+      "operation_error": {
+        "name": "Operation error"
+      },
+      "network_type": {
+        "name": "Network type"
+      }
+    },
+    "switch": {
+      "child_lock": {
+        "name": "Child lock"
+      },
+      "extra_dry": {
+        "name": "Extra dry"
+      },
+      "extra_wash": {
+        "name": "4-wash cycle"
+      },
+      "extra_shake": {
+        "name": "Arm shake"
       }
     }
   },

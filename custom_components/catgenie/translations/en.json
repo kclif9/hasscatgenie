@@ -53,12 +53,60 @@
         }
     },
     "entity": {
+        "binary_sensor": {
+            "fan_shutter": {
+                "name": "Fan shutter"
+            },
+            "heater_fault": {
+                "name": "Heater Fault"
+            },
+            "occupancy": {
+                "name": "Cat detected"
+            },
+            "problem": {
+                "name": "Problem"
+            }
+        },
+        "button": {
+            "start_clean": {
+                "name": "Start clean"
+            }
+        },
+        "number": {
+            "auto_lock_delay": {
+                "name": "Panel lock delay"
+            },
+            "cat_delay": {
+                "name": "Cat activation delay"
+            },
+            "cat_sensitivity": {
+                "name": "Cat sensitivity"
+            },
+            "volume_level": {
+                "name": "Volume level"
+            }
+        },
+        "select": {
+            "cleaning_mode": {
+                "name": "Cleaning mode",
+                "state": {
+                    "automatic": "Automatic",
+                    "manual": "Manual"
+                }
+            }
+        },
         "sensor": {
             "clean_progress": {
                 "name": "Clean progress"
             },
             "last_clean": {
                 "name": "Last clean"
+            },
+            "network_type": {
+                "name": "Network type"
+            },
+            "operation_error": {
+                "name": "Operation error"
             },
             "sani_solution": {
                 "name": "Sani-solution remaining"
@@ -72,6 +120,20 @@
             },
             "total_cycles": {
                 "name": "Total cycles"
+            }
+        },
+        "switch": {
+            "child_lock": {
+                "name": "Child lock"
+            },
+            "extra_dry": {
+                "name": "Extra dry"
+            },
+            "extra_shake": {
+                "name": "Arm shake"
+            },
+            "extra_wash": {
+                "name": "4-wash cycle"
             }
         }
     },

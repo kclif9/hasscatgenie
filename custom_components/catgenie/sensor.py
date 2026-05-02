@@ -70,6 +70,20 @@ SENSOR_DESCRIPTIONS: tuple[CatGenieSensorDescription, ...] = (
         entity_registry_enabled_default=False,
         value_fn=lambda device: device.last_clean.replace(tzinfo=UTC),
     ),
+    CatGenieSensorDescription(
+        key="operation_error",
+        translation_key="operation_error",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        value_fn=lambda device: device.operation_status.error or None,
+    ),
+    CatGenieSensorDescription(
+        key="network_type",
+        translation_key="network_type",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        value_fn=lambda device: device.connection_mode or None,
+    ),
 )
 
 

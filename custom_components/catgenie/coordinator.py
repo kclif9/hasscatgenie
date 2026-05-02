@@ -5,8 +5,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import timedelta
 
-from catgenie import CatGenieAuth, CatGenieClient, Credentials, Device
-from catgenie.auth import AuthenticationError
+from catgenie import (
+    CatGenieAuth,
+    CatGenieAuthenticationError,
+    CatGenieClient,
+    Credentials,
+    Device,
+)
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_TOKEN
@@ -67,12 +72,12 @@ class CatGenieDeviceCoordinator(DataUpdateCoordinator[Device]):
         """Fetch data for this device from the CatGenie API."""
         try:
             devices = await self.client.get_devices()
-        except AuthenticationError:
+        except CatGenieAuthenticationError:
             try:
                 credentials = await self.auth.refresh()
                 self._update_entry_tokens(credentials)
                 devices = await self.client.get_devices()
-            except AuthenticationError as refresh_err:
+            except CatGenieAuthenticationError as refresh_err:
                 raise ConfigEntryAuthFailed(
                     translation_domain=DOMAIN,
                     translation_key="authentication_failed",
