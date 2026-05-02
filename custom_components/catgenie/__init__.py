@@ -2,8 +2,13 @@
 
 from __future__ import annotations
 
-from catgenie import CatGenieAuth, CatGenieClient, Credentials, Device
-from catgenie.auth import AuthenticationError
+from catgenie import (
+    CatGenieAuth,
+    CatGenieAuthenticationError,
+    CatGenieClient,
+    Credentials,
+    Device,
+)
 
 from homeassistant.const import CONF_TOKEN, Platform
 from homeassistant.core import HomeAssistant
@@ -15,7 +20,14 @@ from .coordinator import (
     CatGenieRuntimeData,
 )
 
-PLATFORMS: list[Platform] = [Platform.SENSOR]
+PLATFORMS: list[Platform] = [
+    Platform.BINARY_SENSOR,
+    Platform.BUTTON,
+    Platform.NUMBER,
+    Platform.SELECT,
+    Platform.SENSOR,
+    Platform.SWITCH,
+]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: CatGenieConfigEntry) -> bool:
@@ -29,7 +41,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: CatGenieConfigEntry) -> 
     # Obtain a fresh access token using the stored refresh token
     try:
         credentials = await auth.refresh()
-    except AuthenticationError as err:
+    except CatGenieAuthenticationError as err:
         await auth.__aexit__(None, None, None)
         raise ConfigEntryAuthFailed(
             translation_domain="catgenie",
