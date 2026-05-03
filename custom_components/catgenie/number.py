@@ -18,7 +18,7 @@ from homeassistant.const import EntityCategory, UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .coordinator import CatGenieConfigEntry, CatGenieDeviceCoordinator
+from .coordinator import CatGenieConfigEntry, CatGenieCoordinator
 from .entity import CatGenieEntity
 
 PARALLEL_UPDATES = 1

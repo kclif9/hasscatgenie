@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import Any
 
 from catgenie import CatGenieAuth
-from catgenie.auth import CatGenieAuthenticationError
+from catgenie.exceptions import CatGenieAuthenticationError, CatGenieException
 import voluptuous as vol
 
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
@@ -55,7 +56,7 @@ class CatGenieConfigFlow(ConfigFlow, domain=DOMAIN):
                     )
             except CatGenieAuthenticationError:
                 errors["base"] = "cannot_connect"
-            except Exception:
+            except CatGenieException:
                 LOGGER.exception("Unexpected exception requesting login code")
                 errors["base"] = "unknown"
             else:
@@ -83,7 +84,7 @@ class CatGenieConfigFlow(ConfigFlow, domain=DOMAIN):
                     )
             except CatGenieAuthenticationError:
                 errors["base"] = "invalid_auth"
-            except Exception:
+            except CatGenieException:
                 LOGGER.exception("Unexpected exception during login")
                 errors["base"] = "unknown"
             else:
@@ -101,7 +102,9 @@ class CatGenieConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_reauth(self, entry_data: dict[str, Any]) -> ConfigFlowResult:
+    async def async_step_reauth(
+        self, entry_data: Mapping[str, Any]
+    ) -> ConfigFlowResult:
         """Handle re-authentication when the token is rejected."""
         return await self.async_step_reauth_confirm()
 
@@ -123,7 +126,7 @@ class CatGenieConfigFlow(ConfigFlow, domain=DOMAIN):
                     )
             except CatGenieAuthenticationError:
                 errors["base"] = "cannot_connect"
-            except Exception:
+            except CatGenieException:
                 LOGGER.exception("Unexpected exception requesting login code")
                 errors["base"] = "unknown"
             else:
@@ -151,10 +154,12 @@ class CatGenieConfigFlow(ConfigFlow, domain=DOMAIN):
                     )
             except CatGenieAuthenticationError:
                 errors["base"] = "invalid_auth"
-            except Exception:
+            except CatGenieException:
                 LOGGER.exception("Unexpected exception during re-auth login")
                 errors["base"] = "unknown"
             else:
+                await self.async_set_unique_id(credentials.user_id)
+                self._abort_if_unique_id_mismatch(reason="reauth_account_mismatch")
                 reauth_entry = self._get_reauth_entry()
                 return self.async_update_reload_and_abort(
                     reauth_entry,

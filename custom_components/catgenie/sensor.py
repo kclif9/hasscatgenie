@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import datetime
 
 from catgenie import Device
 
@@ -35,7 +35,6 @@ SENSOR_DESCRIPTIONS: tuple[CatGenieSensorDescription, ...] = (
     CatGenieSensorDescription(
         key="sani_solution",
         translation_key="sani_solution",
-        state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda device: device.remaining_sani_solution,
     ),
     CatGenieSensorDescription(
@@ -92,11 +91,22 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up CatGenie sensors based on a config entry."""
-    async_add_entities(
-        CatGenieSensorEntity(coordinator, description)
-        for coordinator in entry.runtime_data.device_coordinators.values()
-        for description in SENSOR_DESCRIPTIONS
-    )
+    coordinator = entry.runtime_data.coordinator
+    known_device_ids: set[str] = set()
+
+    def _async_add_new_devices() -> None:
+        """Add entities for any newly discovered devices."""
+        new_device_ids = set(coordinator.data) - known_device_ids
+        if new_device_ids:
+            async_add_entities(
+                CatGenieSensorEntity(coordinator, description, device_id)
+                for device_id in new_device_ids
+                for description in SENSOR_DESCRIPTIONS
+            )
+            known_device_ids.update(new_device_ids)
+
+    _async_add_new_devices()
+    entry.async_on_unload(coordinator.async_add_listener(_async_add_new_devices))
 
 
 class CatGenieSensorEntity(CatGenieEntity, SensorEntity):
@@ -107,4 +117,6 @@ class CatGenieSensorEntity(CatGenieEntity, SensorEntity):
     @property
     def native_value(self) -> int | str | datetime | None:
         """Return the state of the sensor."""
-        return self.entity_description.value_fn(self.coordinator.data)
+        if (device := self.device_data) is None:
+            return None
+        return self.entity_description.value_fn(device)

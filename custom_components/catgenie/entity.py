@@ -61,4 +61,8 @@ class CatGenieEntity(CoordinatorEntity[CatGenieCoordinator]):
         """Return True if entity is available."""
         if (device := self.device_data) is None:
             return False
-        return super().available and device.is_online and self.entity_description.available_fn(device)
+        return (
+            super().available
+            and device.is_online
+            and self.entity_description.available_fn(device)
+        )
