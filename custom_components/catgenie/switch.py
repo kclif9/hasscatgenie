@@ -17,14 +17,14 @@ from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .coordinator import CatGenieConfigEntry, CatGenieDeviceCoordinator
-from .entity import CatGenieEntity
+from .coordinator import CatGenieConfigEntry
+from .entity import CatGenieEntity, CatGenieEntityDescription
 
 PARALLEL_UPDATES = 1
 
 
 @dataclass(frozen=True, kw_only=True)
-class CatGenieSwitchDescription(SwitchEntityDescription):
+class CatGenieSwitchDescription(CatGenieEntityDescription, SwitchEntityDescription):
     """Describe a CatGenie switch."""
 
     value_fn: Callable[[Device], bool]
@@ -86,11 +86,22 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up CatGenie switches based on a config entry."""
-    async_add_entities(
-        CatGenieSwitchEntity(coordinator, description)
-        for coordinator in entry.runtime_data.device_coordinators.values()
-        for description in SWITCH_DESCRIPTIONS
-    )
+    coordinator = entry.runtime_data.coordinator
+    known_device_ids: set[str] = set()
+
+    def _async_add_new_devices() -> None:
+        """Add entities for any newly discovered devices."""
+        new_device_ids = set(coordinator.data) - known_device_ids
+        if new_device_ids:
+            async_add_entities(
+                CatGenieSwitchEntity(coordinator, description, device_id)
+                for device_id in new_device_ids
+                for description in SWITCH_DESCRIPTIONS
+            )
+            known_device_ids.update(new_device_ids)
+
+    _async_add_new_devices()
+    entry.async_on_unload(coordinator.async_add_listener(_async_add_new_devices))
 
 
 class CatGenieSwitchEntity(CatGenieEntity, SwitchEntity):
@@ -101,18 +112,16 @@ class CatGenieSwitchEntity(CatGenieEntity, SwitchEntity):
     @property
     def is_on(self) -> bool:
         """Return true if the switch is on."""
-        return self.entity_description.value_fn(self.coordinator.data)
+        if (device := self.device_data) is None:
+            return False
+        return self.entity_description.value_fn(device)
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the switch on."""
-        await self.entity_description.turn_on_fn(
-            self.coordinator.client, self.coordinator.device_id
-        )
+        await self.entity_description.turn_on_fn(self.coordinator.client, self._device_id)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the switch off."""
-        await self.entity_description.turn_off_fn(
-            self.coordinator.client, self.coordinator.device_id
-        )
+        await self.entity_description.turn_off_fn(self.coordinator.client, self._device_id)
         await self.coordinator.async_request_refresh()

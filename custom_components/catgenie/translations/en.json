@@ -60,11 +60,20 @@
             "heater_fault": {
                 "name": "Heater Fault"
             },
+            "network_type": {
+                "name": "Network type"
+            },
             "occupancy": {
                 "name": "Cat detected"
             },
+            "operation_error": {
+                "name": "Operation error"
+            },
             "problem": {
                 "name": "Problem"
+            },
+            "status": {
+                "name": "Status"
             }
         },
         "button": {
@@ -102,21 +111,8 @@
             "last_clean": {
                 "name": "Last clean"
             },
-            "network_type": {
-                "name": "Network type"
-            },
-            "operation_error": {
-                "name": "Operation error"
-            },
             "sani_solution": {
                 "name": "Sani-solution remaining"
-            },
-            "status": {
-                "name": "Status",
-                "state": {
-                    "cleaning": "Cleaning",
-                    "idle": "Idle"
-                }
             },
             "total_cycles": {
                 "name": "Total cycles"
