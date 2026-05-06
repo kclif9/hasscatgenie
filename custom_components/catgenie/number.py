@@ -18,14 +18,14 @@ from homeassistant.const import EntityCategory, UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .coordinator import CatGenieConfigEntry, CatGenieDeviceCoordinator
-from .entity import CatGenieEntity
+from .coordinator import CatGenieConfigEntry
+from .entity import CatGenieEntity, CatGenieEntityDescription
 
 PARALLEL_UPDATES = 1
 
 
 @dataclass(frozen=True, kw_only=True)
-class CatGenieNumberDescription(NumberEntityDescription):
+class CatGenieNumberDescription(CatGenieEntityDescription, NumberEntityDescription):
     """Describe a CatGenie number."""
 
     value_fn: Callable[[Device], float | None]
@@ -96,11 +96,22 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up CatGenie numbers based on a config entry."""
-    async_add_entities(
-        CatGenieNumberEntity(coordinator, description)
-        for coordinator in entry.runtime_data.device_coordinators.values()
-        for description in NUMBER_DESCRIPTIONS
-    )
+    coordinator = entry.runtime_data.coordinator
+    known_device_ids: set[str] = set()
+
+    def _async_add_new_devices() -> None:
+        """Add entities for any newly discovered devices."""
+        new_device_ids = set(coordinator.data) - known_device_ids
+        if new_device_ids:
+            async_add_entities(
+                CatGenieNumberEntity(coordinator, description, device_id)
+                for device_id in new_device_ids
+                for description in NUMBER_DESCRIPTIONS
+            )
+            known_device_ids.update(new_device_ids)
+
+    _async_add_new_devices()
+    entry.async_on_unload(coordinator.async_add_listener(_async_add_new_devices))
 
 
 class CatGenieNumberEntity(CatGenieEntity, NumberEntity):
@@ -111,11 +122,13 @@ class CatGenieNumberEntity(CatGenieEntity, NumberEntity):
     @property
     def native_value(self) -> float | None:
         """Return the current value."""
-        return self.entity_description.value_fn(self.coordinator.data)
+        if (device := self.device_data) is None:
+            return None
+        return self.entity_description.value_fn(device)
 
     async def async_set_native_value(self, value: float) -> None:
         """Set the number value."""
         await self.entity_description.set_fn(
-            self.coordinator.client, self.coordinator.device_id, round(value)
+            self.coordinator.client, self._device_id, round(value)
         )
         await self.coordinator.async_request_refresh()
